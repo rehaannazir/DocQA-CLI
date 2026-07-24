@@ -2,32 +2,40 @@ from embeddings import generate_embeddings
 from utils import extract_text, generate_chunks
 from vectorstore import create_or_get_collection, add_documents
 
-sources = [
+DEFAULT_SOURCES = [
     "docs/container_orchester.pdf",
     "docs/high_traffic_apis.pdf",
     "docs/message_queues.pdf",
 ]
 
-docs = []
-metadatas = []
-ids = []
-embedds = []
 
-for source in sources:
+def run_ingestion(sources=DEFAULT_SOURCES):
 
-    text = extract_text(path=source)
-    chunks = generate_chunks(text=text)
+    docs = []
+    metadatas = []
+    ids = []
 
-    for i, chunk in enumerate(chunks):
+    for source in sources:
 
-        docs.append(chunk)
-        metadatas.append({"source": source, "index": i})
-        ids.append(f"{source}_{i}")
+        text = extract_text(path=source)
+        chunks = generate_chunks(text=text)
 
-embedds = generate_embeddings(docs)
+        for i, chunk in enumerate(chunks):
 
-collection = create_or_get_collection(name="docqa")
+            docs.append(chunk)
+            metadatas.append({"source": source, "index": i})
+            ids.append(f"{source}_{i}")
 
-database = add_documents(
-    collection=collection, embedds=embedds, ids=ids, docs=docs, metadatas=metadatas
-)
+    embedds = generate_embeddings(docs)
+
+    collection = create_or_get_collection(name="docqa")
+
+    add_documents(
+        collection=collection, embedds=embedds, ids=ids, docs=docs, metadatas=metadatas
+    )
+
+    return collection
+
+
+if __name__ == "__main__":
+    run_ingestion()

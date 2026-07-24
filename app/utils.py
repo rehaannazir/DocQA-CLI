@@ -1,11 +1,4 @@
-import os
 import fitz
-from google import genai
-from dotenv import load_dotenv
-from google.genai import types
-
-load_dotenv()
-client = genai.Client(os.getenv("GEMINI_API_KEY"))
 
 
 def extract_text(path: str) -> str:
