@@ -1,7 +1,11 @@
+import time
 from ingest import run_ingestion, DEFAULT_SOURCES
 from vectorstore import create_or_get_collection, similarity_search
 from embeddings import generate_embedding
-from llm import generate_answer
+from llm import generate_answer, retryable_api_call, non_retryable_api_call
+from log import get_logger
+
+logger = get_logger(__name__)
 
 
 def build_prompt(question, context_chunks):
@@ -21,10 +25,18 @@ def ask(question, collection):
     results = similarity_search(collection, query_embedding)
 
     prompt = build_prompt(question, results["documents"][0])
-    response = generate_answer(prompt)
+    try:
+        response = generate_answer(prompt)
 
-    for chunk in response:
-        print(chunk.text, end="", flush=True)
+        for chunk in response:
+            print(chunk.text, end="", flush=True)
+            time.sleep(0.02)
+
+    except (retryable_api_call, non_retryable_api_call) as e:
+        logger.error("API call failed: %s", e)
+
+    except Exception:
+        logger.exception("Unexpected error during call_client")
 
     print()
 
