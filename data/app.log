@@ -1,0 +1,14 @@
+2026-07-25 03:32:12,539 INFO embeddings: Generating embedding for query using model gemini-embedding-001
+2026-07-25 03:32:13,880 INFO httpx: HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2026-07-25 03:32:13,889 INFO embeddings: Generated embedding for query
+2026-07-25 03:32:13,930 INFO llm: Calling chat model gemini-2.5-flash
+2026-07-25 03:32:13,931 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-07-25 03:32:16,026 INFO httpx: HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent?alt=sse "HTTP/1.1 200 OK"
+2026-07-25 03:32:16,072 INFO llm: Received response from chat model gemini-2.5-flash
+2026-07-25 03:33:40,121 INFO embeddings: Generating embedding for query using model gemini-embedding-001
+2026-07-25 03:33:40,921 INFO httpx: HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2026-07-25 03:33:40,928 INFO embeddings: Generated embedding for query
+2026-07-25 03:33:40,980 INFO llm: Calling chat model gemini-2.5-flash
+2026-07-25 03:33:40,980 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-07-25 03:33:42,887 INFO httpx: HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent?alt=sse "HTTP/1.1 200 OK"
+2026-07-25 03:33:42,890 INFO llm: Received response from chat model gemini-2.5-flash
