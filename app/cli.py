@@ -1,4 +1,5 @@
 import time
+import random
 from ingest import run_ingestion, DEFAULT_SOURCES
 from vectorstore import create_or_get_collection, similarity_search
 from embeddings import generate_embedding
@@ -14,7 +15,7 @@ def build_prompt(question, context_chunks):
 
     return (
         "Answer the question using only the context below. "
-        "If the answer isn't in the context, say you don't know.\n\n"
+        "If the answer isn't in the context, say the question is out of the box.\n\n"
         f"Context:\n{context}\n\nQuestion: {question}\nAnswer:"
     )
 
@@ -29,8 +30,18 @@ def ask(question, collection):
         response = generate_answer(prompt)
 
         for chunk in response:
-            print(chunk.text, end="", flush=True)
-            time.sleep(0.02)
+            if not chunk.text:
+                continue
+
+            for ch in chunk.text:
+                print(ch, end="", flush=True)
+
+                if ch in ".,!?\n":
+                    time.sleep(random.uniform(0.08, 0.18))
+                elif ch == " ":
+                    time.sleep(random.uniform(0.01, 0.03))
+                else:
+                    time.sleep(random.uniform(0.015, 0.045))
 
     except (retryable_api_call, non_retryable_api_call) as e:
         logger.error("API call failed: %s", e)
