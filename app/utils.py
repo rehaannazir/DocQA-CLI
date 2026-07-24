@@ -28,20 +28,3 @@ def generate_chunks(text: str, chunk_size=500, overlap=100) -> list:
         start = end - overlap
 
     return chunks
-
-
-def generate_embeddings(chunks: list, model="gemini-embedding-001") -> list:
-
-    embedds = []
-
-    for chunk in chunks:
-
-        response = client.models.embed_content(
-            model=model,
-            contents=chunk,
-            config=types.EmbedContentConfig(task_type="RETRIEVAL_DOCUMENT"),
-        )
-
-        embedds.append(response.embeddings[0].values)
-
-    return embedds

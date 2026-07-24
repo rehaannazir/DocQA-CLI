@@ -1,5 +1,6 @@
-import chromadb
-from helper import extract_text, generate_chunks, generate_embeddings
+from embeddings import generate_embeddings
+from utils import extract_text, generate_chunks
+from vectorstore import create_or_get_collection, add_documents
 
 sources = [
     "docs/container_orchester.pdf",
@@ -25,17 +26,8 @@ for source in sources:
 
 embedds = generate_embeddings(docs)
 
-client = chromadb.PersistentClient("data/")
+collection = create_or_get_collection(name="docqa")
 
-try:
-    client.delete_collection(name="docqa")
-except (ValueError, chromadb.errors.NotFoundError):
-    pass
-
-collection = client.get_or_create_collection(
-    name="docqa", metadata={"hnsw:space": "cosine"}
-)
-
-database = collection.add(
-    embeddings=embedds, ids=ids, documents=docs, metadatas=metadatas
+database = add_documents(
+    collection=collection, embedds=embedds, ids=ids, docs=docs, metadatas=metadatas
 )
